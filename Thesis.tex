@@ -1,0 +1,231 @@
+% **************************************************************************************************************
+% A Classic Thesis Style
+% An Homage to The Elements of Typographic Style
+%
+% Copyright (C) 2011 Andr\'e Miede http://www.miede.de
+%
+% If you like the style then I would appreciate a postcard. My address 
+% can be found in the file ClassicThesis.pdf. A collection of the 
+% postcards I received so far is available online at 
+% http://postcards.miede.de
+%
+% License:
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program; see the file COPYING.  If not, write to
+% the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+% Boston, MA 02111-1307, USA.
+%
+% **************************************************************************************************************
+% Note:
+%    * You must not use "u etc. in strings/commands that will be spaced out (use \"u or real umlauts instead)
+%    * New enumeration (small caps): \begin{aenumerate} \end{aenumerate}
+%    * For margin notes: \marginpar or \graffito{}
+%    * Do not use bold fonts in this style, it is designed around them
+%    * Use tables as in the examples
+%    * See classicthesis-preamble.sty for useful commands
+% **************************************************************************************************************
+% To Do:
+%		 * [high] Check this out: http://www.golatex.de/koma-script-warnung-in-verbindung-mit-listings-package-t2058.html
+%    * [medium] mathbb in section-titles/chapter-titles => disappears somehow in headlines!!!
+% **************************************************************************************************************
+\documentclass[ oneside,openright,titlepage,numbers=noenddot,headinclude,%1headlines,% letterpaper a4paper
+                footinclude=false,cleardoublepage=empty,abstractoff, % <--- obsolete, remove (todo)
+                BCOR=5mm,paper=a4,fontsize=11pt,%11pt,a4paper,%
+                ngerman,american,%
+                ]{scrreprt}
+
+%********************************************************************
+% Note: Make all your adjustments in here
+%*******************************************************
+\usepackage{classicthesis-preamble} % [backref]
+\usepackage[left=40mm,right=25mm,top=20mm,bottom=40mm]{geometry}
+\usepackage{natbib}
+\usepackage{amsfonts}
+\usepackage{type1cm} % scalable fonts
+\usepackage{lettrine}
+\usepackage{breqn}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{algorithm2e}
+\usepackage{tikz}
+\usepackage{tabularx}
+\usetikzlibrary{chains,fit,shapes, matrix}
+\usepackage{enumitem} 
+\SetLabelAlign{parright}{\parbox[t]{\labelwidth}{\raggedright#1}}
+\setlist[description]{style=multiline,leftmargin=3cm, align=parright,itemsep=2mm}
+%\usepackage{caption}
+%\usepackage{subcaption}
+\makeatletter
+\renewcommand\bibsection{\section*{}}
+\makeatother
+\usepackage{multibib}
+\newcites{own}{Publications}
+\newcites{others}{Bibliography}
+\newtheorem{mydef}{Definition}
+\newtheorem{ex}{Example}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newenvironment{myexample}[1]
+{\begin{adjustbox}{minipage=[b]{380px},margin=1ex,bgcolor=gray!10,env=center}\begin{ex}#1\end{ex}}
+{\end{adjustbox}}
+\newtheorem{thm}{Theorem}[section]
+\newenvironment{mytheorem}[1]
+{\begin{thm}#1\end{thm}}
+{}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{ratio_lemma}{Lemma}
+%\renewcommand\baselinestretch{1}
+\usepackage{setspace}
+\doublespacing
+\usepackage{color}
+\newcommand{\ToDo}[1]{\textbf{\large\textcolor{blue}{[#1]}}}
+%*******************************************************
+% Some font experiments
+%*******************************************************
+%\usepackage[osf]{libertine}
+%\usepackage{hfoldsty}
+%\usepackage[light,condensed,math]{iwona}
+%\renewcommand{\sfdefault}{iwona}
+%\usepackage{lmodern} % <-- no osf support :-(
+%\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
+
+%*******************************************************
+% Fine-tuning for the text area
+%*******************************************************
+%\linespread{1.05} % a bit more for Palatino
+%\areaset[current]{312pt}{761pt} % 686 (factor 2.2) + 33 head + 42 head \the\footskip
+%\setlength{\marginparwidth}{7em}%
+%\setlength{\marginparsep}{2em}%
+
+%********************************************************************
+% Hyphenation
+%*******************************************************
+%\hyphenation{put special hyphenation here}
+
+% ********************************************************************
+% GO!GO!GO! MOVE IT!
+%*******************************************************
+
+\usepackage{breqn}
+\newenvironment{myMaths}{\footnotesize \begin{dmath}}{\end{dmath}}
+\setlength{\headheight}{25pt}
+\addtolength{\jot}{1em} % space between aligned equations
+\newcommand{\logTerm}[2]{#1\overline{\log} #1 + #2\overline{\log} #2 - (#1+#2)\overline{\log}(#1+#2)}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\p}{\mathcal{P}}
+\newcommand{\F}{\mathcal{F}}
+
+\begin{document}
+\frenchspacing
+\raggedbottom
+\selectlanguage{american} % american ngerman
+%\renewcommand*{\bibname}{new name}
+%\setbibpreamble{}
+\pagenumbering{roman}
+\pagestyle{plain}
+%********************************************************************
+% Frontmatter
+%*******************************************************
+\include{FrontBackmatter/Titlepage}
+\include{FrontBackmatter/Titleback}
+\cleardoublepage\include{FrontBackmatter/Declaration}
+\cleardoublepage\include{FrontBackmatter/Dedication}
+\cleardoublepage\include{FrontBackmatter/Abstract}
+%\cleardoublepage\include{FrontBackmatter/Publication}
+\cleardoublepage\include{FrontBackmatter/Acknowledgments}
+\pagestyle{scrheadings}
+\cleardoublepage\include{FrontBackmatter/Contents}
+%********************************************************************
+% Mainmatter
+%*******************************************************
+\pagenumbering{arabic}
+%\setcounter{page}{90}
+% use \cleardoublepage here to avoid problems with pdfbookmark
+\cleardoublepage
+%
+\ctparttext{%
+%
+The concept of similarity is a fairly intuitive one.  Objects that are similar have features in common, while dissimilar objects have less.  Understanding this from a mathematical point of view requires that this be somehow measured and assigned a number.  Fortunately, another concept fits nicely with similarity -- distance.  We all already use it colloquially, e.g. ``A close match''.  In this part, we show how distance as the sole measure of similarity has all of the properties required to make an effective search paradigm. We describe the mathematical abstraction of metric spaces; how spaces can be divided to produce efficient storage structures; and common queries that make similarity searching worthwhile.% 
+%
+}
+
+%
+\include{Chapters/Chapter01}
+%
+\part{Mathematical Preliminaries}
+%
+%\include{Chapters/Chapter02}
+%
+\include{Chapters/Chapter03}
+%
+%\addtocontents{toc}{\protect\clearpage} % <--- just debug stuff, ignore
+%
+\cleardoublepage
+%
+\ctparttext{%
+%
+Information theory provides techniques for measuring the quantity of information contained within a given structure.  In this part, we introduce a new universal distance metric which is based upon the relative information content between two structures.  We show how this metric can be efficiently computed and how it compares to other algorithms in terms of relevance and accuracy.%
+%
+}
+%
+\part{Similarity with information theory}
+%
+\include{Chapters/Chapter04}
+%
+
+\include{Chapters/Chapter05}
+%
+\include{Chapters/Chapter07}
+\cleardoublepage
+%
+\ctparttext{%
+%
+Having explored the various properties of structural entropic distance we now shift our attention to the more practical aspect of applying it to common problems involving distance.%
+%
+}
+%
+\part{Applications of SED}
+%
+\include{Chapters/Chapter10}
+%
+\include{Chapters/Chapter06}
+\include{Chapters/Chapter08}
+%
+%\include{Chapters/Chapter09}
+%
+
+%
+\include{Chapters/Chapter11}
+%\include{multiToC} % <--- just debug stuff, ignore for your documents
+% ********************************************************************
+% Backmatter
+%*******************************************************
+%\appendix
+%%
+%\cleardoublepage
+%%
+%\part{Appendix}
+%%
+%\include{Chapters/Chapter0A}
+%********************************************************************
+% Other Stuff in the Back
+%*******************************************************
+\cleardoublepage\include{FrontBackmatter/Bibliography}
+\end{document}
+% ********************************************************************

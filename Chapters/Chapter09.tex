@@ -1,0 +1,34 @@
+%************************************************
+\chapter{Outlier detection}\label{ch:outlier}
+%************************************************
+\begin{flushleft}{\slshape    
+    At the time, Nixon was normalizing relations with China.  
+    I figured that if he could normalize relations, then so could I} \\ \medskip
+    --- Edgar Codd
+\end{flushleft}
+%
+SEE:\cite{Davies:1979, Chandola:2009, Brito:1997,  Ramaswamy:2000, Knorr:1998,Knorr:2000,Zhang:2006,Hautamaki:2004,Angiulli:2002,Angiulli:2006,Breunig:2000,Pham:2012,Bay:2003,Kriegel:2008}
+%
+We observe an interesting clustering factor that can be applied to an element $e$ of a set $E$:
+% very efficient outlier  function for a set of ensembles A:
+%
+\[
+C_k(e) = D(e + \text{kNN}(e))
+\]
+%
+That is, for a cluster size $k$, we can associate a clustering score according to the divergence of the set composed of that element along with its $k$ nearest neighbours. It is worth noting that the evaluation of this function is very efficient using similarity search techniques, as the kNN function can typically be executed  efficiently in $\log n$ time when $d$ is a proper metric.
+
+This immediately gives  an outlier detection strategy, using a relatively small value of $k$ to detect outliers in $O(n \log n)$ for well-behaved collections. This calculation also seems  likely to be a useful initial analysis of a set of values to be clustered, given that it identifies and scores all the possible $k$-clusters within the set at relatively low cost.
+
+Another function seems likely to be useful in cluster analysis, which we call the absorption function:
+%
+\[
+A_E(e) = \frac{D(E) }{ D(E + e)}
+\]
+%
+The outcome of this function can be less than or greater than 1, depending on whether the set $E$ is able to absorb the value $e$ or not; note that adding a ``normal" element to a set can decrease its divergence, while adding an outlier will increase it. If  a new element is to be added to one of a number of existing clusters, then it should be added to the one with the highest absorption score. It can be seen that this observation alone is enough to define a simple (and, again, efficient) clustering strategy; there are many others, which require to be investigated and tested for semantic efficacy.
+\subsection{Experiment 5}
+\ToDo{Devise and Run Experiment}
+\subsection{Experiment 6}
+\ToDo{Devise and Run Experiment}
+%

@@ -1,0 +1,27 @@
+-- Introduction --
+* Make relevant to entire thesis
+
+-- Maths chapter --
+* Do probability section
+* Integerate Information theory section properly
+
+-- MSED chapter --
+* expand correlation experiments
+
+-- Efficiency chapter --
+* check out the effect of early termination with different thresholds
+* analysis of results
+
+-- Sim sear chapter --
+* Run experiment to see if cost model matches
+* Find out when JSD and SED are different
+
+-- IR chapter --
+* Check all formulae are correct
+* Compare with DFR etc.
+
+-- clustering chapter --
+* integerate fully
+* do classification
+* do outlier detection
+

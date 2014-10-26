@@ -1,0 +1,86 @@
+%********************************************************************
+% Appendix
+%*******************************************************
+% If problems with the headers: get headings in appendix etc. right
+%\markboth{\spacedlowsmallcaps{Appendix}}{\spacedlowsmallcaps{Appendix}}
+\chapter{Appendix}
+\section{Algebraic rewrite of SED}
+The term
+\begin{myMaths} \frac{b^{H_b(XY)}}{\sqrt{b^{H_b(X)} \cdot b^{H_b(Y)}}} \end{myMaths}
+can be rewritten as
+\begin{myMaths} b^{H_b(XY) - \frac{H_b(X) + H_b(Y)}{2}} \end{myMaths}
+and substituting $H_b$ with its definition, the exponent 
+\begin{myMaths} H_b(XY) - \frac{H_b(X) + H_b(Y)}{2} \end{myMaths} 
+expands to
+
+\begin{myMaths}
+-\left(\sum_{e \in X \cup Y}\frac{f_X(e) + f_Y(e)}{2} \log_b \frac{f_X(e) + f_Y(e)}{2}\right)
+	+ \frac{\sum_{e \in X} f(e) \log_b f(e) + \sum_{e \in Y} f(e) \log_b f(e)}{2}
+\end{myMaths}
+and this in turn can be expressed as a single sum
+
+\begin{myMaths}
+-\frac{1}{2} \left(\sum_{e \in X \cup Y} (f_X(e) + f_Y(e)) \log_b \frac{f_X(e) + f_Y(e)}{2} + f_X(e) \log_b f_X(e) + f_Y(e) \log_b f_Y(e)\right)
+\end{myMaths}
+or by using the intersection of the events instead of the union
+
+\begin{myMaths}
+1 -\frac{1}{2} \left(\sum_{e \in X \cap Y} (f_X(e) + f_Y(e)) \log_b \frac{f_X(e) + f_Y(e)}{2} - f_X(e) \log_b f_X(e) - f_Y(e) \log_b f_Y(e) + f_X(e) + f_Y(e)\right)
+\end{myMaths}
+
+Using base 2 for the logarithms simplifies further
+
+\begin{myMaths}
+1 -\frac{1}{2}\left( \sum_{e \in X \cap Y} (f_X(e) + f_Y(e)) \log_2 (f_X(e) + f_Y(e)) - (f_X(e) + f_Y(e)) \log_2 2 - f_X(e) \log_2 f_X(e) - f_Y(e) \log_2 f_Y(e) + f_X(e) + f_Y(e)\right)
+\end{myMaths}
+then since $\log_2 2 = 1$, remove extraneous terms
+\begin{myMaths}
+1 -\frac{1}{2} \left(\sum_{e \in X \cap Y} (f_X(e) + f_Y(e)) \log_2 (f_X(e) + f_Y(e)) - f_X(e) \log_2 f_X(e) - f_Y(e) \log_2 f_Y(e)\right)
+\end{myMaths}
+then rearrange further
+\begin{myMaths}
+1 -\frac{1}{2}  \left(\sum_{e \in X \cap Y} \log_2 (f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))} -  \log_2 f_X(e)^{f_X(e)} -  \log_2 f_Y(e)^{f_Y(e)}\right)
+\end{myMaths}
+and combine
+\begin{myMaths}
+1 -\frac{1}{2} \left(\sum_{e \in X \cap Y} \log_2 (f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))} -  \log_2 f_X(e)^{f_X(e)} f_Y(e)^{f_Y(e)}\right)
+\end{myMaths}
+then
+\begin{myMaths}
+1 -\frac{1}{2} \sum_{e \in X \cap Y} \log_2 \frac{(f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))}}{ f_X(e)^{f_X(e)} f_Y(e)^{f_Y(e)}}
+\end{myMaths}
+
+At this point, substitute this into the original term
+\begin{myMaths}
+2^{1 -\frac{1}{2} \sum_{e \in X \cap Y} \log_2 \frac{(f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))}}{ f_X(e)^{f_X(e)} f_Y(e)^{f_Y(e)}}}
+\end{myMaths}
+which can then be rewritten as
+\begin{myMaths}
+2 \cdot 2^{\frac{1}{2} \sum_{e \in X \cap Y} \log_2 \frac{f_X(e)^{f_X(e)} f_Y(e)^{f_Y(e)}}{(f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))}}}
+\end{myMaths}
+then
+\begin{myMaths}
+2 \cdot 2^{ \log_2 \prod_{e \in X \cap Y} \left(\frac{f_X(e)^{f_X(e)} f_Y(e)^{f_Y(e)}}{(f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))}}\right)^{\frac{1}{2}}}
+\end{myMaths}
+and removing the $\log$ term
+\begin{myMaths}
+2 \cdot \prod_{e \in X \cap Y} \left(\frac{f_X(e)^{f_X(e)} f_Y(e)^{f_Y(e)}}{(f_X(e) + f_Y(e))^{(f_X(e) + f_Y(e))}}\right)^{\frac{1}{2}}
+\end{myMaths}
+or
+\begin{myMaths}
+2 \cdot \prod_{e \in X \cap Y} 
+\left(
+\frac{f_X(e)}
+     {f_X(e) + f_Y(e)}
+\right)^{\frac{f_X(e)}{2}}
+\left(
+\frac{f_Y(e)}
+     {f_X(e) + f_Y(e)}
+\right)^{\frac{f_Y(e)}{2}}
+\end{myMaths}
+therefore the distance function can be written
+\begin{myMaths}
+d(X,Y) = 2 \cdot \left( \prod_{e \in X \cap Y} 
+\left(u_e^{u_e} \cdot v_e^{v_e} \right)^{w}\right) - 1
+\end{myMaths}
+where $u_e = \frac{f_X(e)}  {f_X(e) + f_Y(e)}$, $ v_e = \frac{f_Y(e)}{f_X(e) + f_Y(e)}$ and $w_e = \frac{f_X(e) + f_Y(e)}{2}$
