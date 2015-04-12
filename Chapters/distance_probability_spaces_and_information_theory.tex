@@ -1,15 +1,16 @@
 %************************************************
-\chapter{Distance, Probability Spaces and Information Theory}\label{ch:indexingTechniques}
+\chapter{Distance, Probability Spaces and Information Theory}\label{ch:distance_probability_spaces_and_information_theory}
 %************************************************
-\begin{flushleft}{\slshape    
-    At the time, Nixon was normalizing relations with China.  
-    I figured that if he could normalize relations, then so could I} \\ \medskip
-    --- Edgar Codd
-\end{flushleft}
+%\begin{flushleft}{\slshape    
+%    At the time, Nixon was normalizing relations with China.  
+%    I figured that if he could normalize relations, then so could I} \\ \medskip
+%    --- Edgar Codd
+%\end{flushleft}
 %
 In this chapter we review the basics of information theory starting with a brief recap of probability, then introduce information, and finally derive entropy as defined by Shannon in his seminal work\cite{Shannon:1948} to serve as a foundation for later chapters.
 
 \section{Distance}
+
 % ********************* %
 \subsection{Metric spaces}
 % ********************* %
@@ -37,7 +38,7 @@ A metric space $M$ is an ordered pair $(X,d)$ where $X$ is a set and $d: X \time
 % ********************* %
 \subsection{Vector spaces}
 % ********************* %
-Vector spaces are more specific than metric spaces, since they allow the elements of the space to be added or scaled to produce new elements.\ToDo{Give more motivation for describing this}
+Vector spaces are more specific than metric spaces, since they allow the elements of the space to be added or scaled to produce new elements.%\ToDo{Give more motivation for describing this}
 \begin{mydef} 
 A metric space $M = (V, d)$ is also a vector space if $V$ is closed under addition and multiplication operations.
 %
@@ -78,7 +79,7 @@ And the following laws of distributivity also:
  \end{flalign*} 
 %
 \end{mydef}
-As a further refinement we now define a Normed Vector Space which adds the concept of magnitude to the elements of the space.\ToDo{Give more motivation for describing this}
+As a further refinement we now define a Normed Vector Space which adds the concept of magnitude to the elements of the space.%\ToDo{Give more motivation for describing this}
 \begin{mydef} 
 A normed vector space $N = (V, \|\cdot\|)$ where $V$ is a vector space and $\|\cdot\|: V \rightarrow \mathbb{R}$ a normalisation function.
 %
@@ -94,7 +95,7 @@ Furthermore, the normalisation function must satisfy the following three propert
   && \|\mathbf{x} + \mathbf{y} \| \leq \|\mathbf{x}\| + \|\mathbf{y}\| \tag{triangle inequality}&&
  \end{flalign*} 
 \end{mydef}
-As a final refinement to vector spaces, let us now add the concept of inner product.\ToDo{Give more motivation for describing this}
+As a final refinement to vector spaces, let us now add the concept of inner product.%\ToDo{Give more motivation for describing this}
 %
 \begin{mydef} 
 A inner product space $I = (N, \langle\cdot, \cdot\rangle)$ where $N = (V, \|\cdot\|)$ is a normed vector space and $\langle \cdot, \cdot \rangle: V \times V \rightarrow \mathbb{R}$ an inner product function.
@@ -119,61 +120,61 @@ Furthermore, the inner product must satisfy the following three properties:
 \end{flalign*}
 \end{mydef}
 \subsection{Distance Metrics}
-\ToDo{What is the motivation for describing all of these distance functions?}
+%\ToDo{What is the motivation for describing all of these distance functions?}
 Given these mathematical abstractions, we might ask what kind of distance functions exist that satisfy these axioms and what are they good for.  Let us start with a simple example, we would like to measure the similarity of two strings of characters.  This could be because we are building a spelling checker that might give suggestions of the most likely intended word.  It might also be required for a biologist working on DNA sequences that needs to find commonalities to identify some gene's function.
-\begin{myexample}{Edit Distance\ToDo{fix}}\label{dist:edit}
-\[
-d(x, y) = \begin{cases}
-            \max(i,j) &\mbox{if } \min(i,j) = 0 \\
-            \min \begin{cases} 
-                d(x-1, y) + 1\\
-                d(x, y-1) + 1\\
-                d(x-1, y-1) + [x \neq y]
-            \end{cases}&\mbox{otherwise} 
-\end{cases}
-\]
-\end{myexample}
-Example \ref{dist:edit} describes the edit distance or Levenshtein distance, this describes cost of a sequence of transformations that turns one string into another.
+%\begin{myexample}{Edit Distance\ToDo{fix}}\label{dist:edit}
+%\[
+%d(x, y) = \begin{cases}
+%            \max(i,j) &\mbox{if } \min(i,j) = 0 \\
+%            \min \begin{cases} 
+%                d(x-1, y) + 1\\
+%                d(x, y-1) + 1\\
+%                d(x-1, y-1) + [x \neq y]
+%            \end{cases}&\mbox{otherwise} 
+%\end{cases}
+%\]
+%\end{myexample}
+%Example \ref{dist:edit} describes the edit distance or Levenshtein distance, this describes cost of a sequence of transformations that turns one string into another.
+%%
+%\begin{myexample}{Cosine Distance}
+%\ToDo{Discuss}
+%%
+%\[
+%  d_{\cos}(x,y) =  \cos^{-1}\left(\frac{x \cdot y}{|x| \cdot |y|}\right) \cdot \frac{2}{\pi} 
+%\]
+%\end{myexample}
 %
-\begin{myexample}{Cosine Distance}
-\ToDo{Discuss}
+%%
+%\begin{myexample}{Minkowski Distances}
+%\ToDo{Discuss}
+%%
+%Let $x, y \in \mathbb{R}^n$ 
+%%
+%\[ 
+%  d_p(x, y) = \sqrt[p]{\sum_{i=1}^{n} | x_i - y_i |^p} 
+%\]
+%%
+%\end{myexample}
 %
-\[
-  d_{\cos}(x,y) =  \cos^{-1}\left(\frac{x \cdot y}{|x| \cdot |y|}\right) \cdot \frac{2}{\pi} 
-\]
-\end{myexample}
-
+%\begin{myexample}{Mahalanobis Distance}
+%\ToDo{Discuss}
+%%
+%\[ 
+%  d(x, y) = \sqrt{(x - y)M(x - y)^T} 
+%\]
+%\end{myexample}
 %
-\begin{myexample}{Minkowski Distances}
-\ToDo{Discuss}
+%%
+%\begin{myexample}{Jaccard Distance}
+%\ToDo{Discuss}
+%%
+%\[ 
+%  d(X,Y) = 1 - \frac{X \cap Y}{X \cup Y} 
+%\]
+%%
+%\end{myexample}
 %
-Let $x, y \in \mathbb{R}^n$ 
-%
-\[ 
-  d_p(x, y) = \sqrt[p]{\sum_{i=1}^{n} | x_i - y_i |^p} 
-\]
-%
-\end{myexample}
-
-\begin{myexample}{Mahalanobis Distance}
-\ToDo{Discuss}
-%
-\[ 
-  d(x, y) = \sqrt{(x - y)M(x - y)^T} 
-\]
-\end{myexample}
-
-%
-\begin{myexample}{Jaccard Distance}
-\ToDo{Discuss}
-%
-\[ 
-  d(X,Y) = 1 - \frac{X \cap Y}{X \cup Y} 
-\]
-%
-\end{myexample}
-
-etc...
+%etc...
 % ************************** %
 \subsection{Space partitioning}
 % ************************** %
@@ -210,33 +211,40 @@ Let $p_1$ and $p_2$ be two arbitary pivots selected from $S \subseteq X$.  Parti
 Bellman coined the term \textit{curse of dimensionality} referring to the exponential growth in the number of samples required to estimate a function with a given level of accuracy to its number of variables (or dimensions)\cite{Bellman:2003}.  This has a direct impact on similarity searching in that the number of points that must be visited to build the result of a query grows exponentially to the number of dimensions in the space.  In some cases, data may even be clustered together so tightly that the distance between the nearest neighbour and the farthest neighbour are the same, rendering any result meaningless.  In fact, it has been shown that these values converge as the number of dimensions increase%\cite{Indyk:1998}
 %
 \subsubsection{Measuring dimensionality}
-Given the difficulty of indexing spaces with high dimensionality, a prudent approach would be to measure this.  [Here are the authors that have made a contribution, and what they have done]
+Given the difficulty of indexing spaces with high dimensionality, a prudent approach would be to measure this. 
+% [Here are the authors that have made a contribution, and what they have done]
 %$d = \lim_{\epsilon \rightarrow 0} \frac{H_\epsilon(X)}{\log 1/\epsilon}$
 %Intrinsic dimensionality
 %
-There is a great volume of work on the analysis of high-dimensional search spaces. Navarro gives a very elegant analysis of the history of this, along with some cogent insights into directions which could be usefully followed in the future, and bemoans the small volume of current research on the topic. We follow his advice in that we attempt to find a general analysis rather than looking for reliance upon experiment or detailed analysis of particular data structures. Furthermore we also believe our analysis fulfils his longer-term goals of research in this domain which can underlie useful insight in the design of future techniques, rather than simply provide performance indicators.
-Other researchers also have advocated the analysis of performance based crucially upon the distribution of distances within the range of the metric over the objects of the space rather than on the data itself of the index structures, and we follow that lead.
+There is a great volume of work on the analysis of high-dimensional search spaces. Navarro gives a very elegant analysis of the history of this, along with some cogent insights into directions which could be usefully followed in the future, and bemoans the small volume of current research on the topic. 
+%We follow his advice in that we attempt to find a general analysis rather than looking for reliance upon experiment or detailed analysis of particular data structures. Furthermore we also believe our analysis fulfils his longer-term goals of research in this domain which can underlie useful insight in the design of future techniques, rather than simply provide performance indicators.
+%Other researchers also have advocated the analysis of performance based crucially upon the distribution of distances within the range of the metric over the objects of the space rather than on the data itself of the index structures, and we follow that lead.
 
-In \cite{}, a derivation for an exclusion probability e is given; this concept is technically equivalent to the probability pe we introduce in chapter \label{}, although we use a simplified version via the introduction of various assumptions. In spirit, this e is more similar to our IF , in that both are the probabilities of a pivoting operation failing to exclude some part of the data set from an exhaustive search.
-In the end, we deduce an outcome for the cost of a search in the order of (1 + IF ) ln n , rather than k + ne k , which is perhaps not inconsistent given that we use a much more restrictive indicative context.
+%In \cite{}, a derivation for an exclusion probability e is given; this concept is technically equivalent to the probability pe we introduce in chapter \label{}, although we use a simplified version via the introduction of various assumptions. In spirit, this e is more similar to our IF , in that both are the probabilities of a pivoting operation failing to exclude some part of the data set from an exhaustive search.
+%In the end, we deduce an outcome for the cost of a search in the order of (1 + IF ) ln n , rather than k + ne k , which is perhaps not inconsistent given that we use a much more restrictive indicative context.
 
 %\subsection{Instrinsic Dimensionality}
-Our own work is more closely related to the description of Intrinsic Dimensionality as a performance predictor given in \cite{}. In particular it is applicable where the distance distribution strays from the ideal underlying Gaussian model, and where the fraction of data to be fetched is small.
-In common with \cite{}, the basis for measurement is only the set of distances produced by the metric with respect to the space, rather than the data itself, and our aim is to find a pragmatic measure of efficacy based only on the distribution of these distances. Both approaches allow for an automated assessment to be made only on presentation of a metric space with a random sampling mechanism.
+%Our own work is more closely related to the description of Intrinsic Dimensionality as a performance predictor given in \cite{}. In particular it is applicable where the distance distribution strays from the ideal underlying Gaussian model, and where the fraction of data to be fetched is small.
+%In common with \cite{}, the basis for measurement is only the set of distances produced by the metric with respect to the space, rather than the data itself, and our aim is to find a pragmatic measure of efficacy based only on the distribution of these distances. Both approaches allow for an automated assessment to be made only on presentation of a metric space with a random sampling mechanism.
 
 The Intrinsic Dimensionality (IDIM) of a metric space is a measure defined over a distance histogram produced by the distance metric over the data. It is defined as
-\[\]
-where  is the median and  is the standard deviation of the range of the metric over the data collection. An IDIM of n corresponds roughly to the histogram of Euclidean distance over densely-populated n-dimensional Cartesian space. It is usually, but not always, the case that a higher value for IDIM leads to a worse performance of index structures for similarity search.
-The authors give a lower bound for the cost of a pivoting operation as
-\[\]
-where is the IDIM,  is the fraction of the data being returned, and n is the size of the data. However this formula is valid only when 
-, meaning that for large data sets, and therefore small values of f , it is of limited value.
-The work uses an underlying assumption that the metric gives a Gaussian distribution of outcomes. Figure 1 shows some distributions which are clearly not Gaussian; these are not artificially constructed, but show meaningful metrics in use over data sets within the SISAP collection [6].
-More important, we believe, is that no metric distribution obeys a Gaussian distribution close to the origin as distances are by definition lower-bounded at zero, and we later show distributions very close to Gaussian where IDIM comparison is misleading as a predictor of performance.
-In the discussion, the authors consider the same region of interest as here, the set of sampled distances which do not allow a median-centred pivot operation to successfully exclude any data from a search. Our contributions over and above that are: (i) we note the fact that the distribution at the origin is crucially important in terms of selecting a value for the query threshold (t), and that the Gaussian model does not explain this; (ii) we note that the effect of t over the distribution is an effect of the standard deviation alone, and is unaffected by the value of the median, and (iii) by treating this region as a probability, by use of a probability density function rather than a histogram, we go on to calculate an actual indexing performance prediction based on a notional ball-pivot data structure.
+\[ 
+\rho = \frac{\mu^2}{2\sigma^2}
+\]
+where $\mu$ is the expected distance and $\sigma^2$ is the variance of the range of the metric over the data collection. An IDIM of n corresponds roughly to the histogram of Euclidean distance over densely-populated n-dimensional Cartesian space. It is usually, but not always, the case that a higher value for IDIM leads to a worse performance of index structures for similarity search.
 
-\subsubsection{Dimensionality reduction}
-Beyond simply measuring, some authors have approached the curse of dimensionality through a technique called dimensionality reduction. [Here are the authors that have made a contribution, and what they have done] 
+The authors give a lower bound for the cost of a pivoting operation as
+\[ \left( \sqrt{\rho} - \frac{1}{\sqrt{2f}} \right)^2 \cdot \ln n\]
+where $\rho$ is the IDIM, $f$ is the fraction of the data being returned, and $n$ is the size of the data. However this formula is valid only when $f > \frac{1}{2\rho}$, meaning that for large data sets, and therefore small values of $f$, it is of limited value.
+The work uses an underlying assumption that the metric gives a Gaussian distribution of outcomes. 
+%Figure 1 shows some distributions which are clearly not Gaussian; these are not artificially constructed, but show meaningful metrics in use over data sets within the SISAP collection [6].
+More important, we believe, is that no metric distribution obeys a Gaussian distribution close to the origin as distances are by definition lower-bounded at zero, and we later show distributions very close to Gaussian where IDIM comparison is misleading as a predictor of performance.
+
+In the discussion, the authors consider the same region of interest as here, the set of sampled distances which do not allow a median-centred pivot operation to successfully exclude any data from a search. 
+%Our contributions over and above that are: (i) we note the fact that the distribution at the origin is crucially important in terms of selecting a value for the query threshold (t), and that the Gaussian model does not explain this; (ii) we note that the effect of t over the distribution is an effect of the standard deviation alone, and is unaffected by the value of the median, and (iii) by treating this region as a probability, by use of a probability density function rather than a histogram, we go on to calculate an actual indexing performance prediction based on a notional ball-pivot data structure.
+
+%\subsubsection{Dimensionality reduction}
+%Beyond simply measuring, some authors have approached the curse of dimensionality through a technique called dimensionality reduction. [Here are the authors that have made a contribution, and what they have done] 
 %% *************** %
 %\section{Summary}
 %% *************** %
@@ -273,13 +281,13 @@ A probability distribution assigns a probability to each subset.
 %Probabilities can be determined empirically as the number of times an event has occurred normalised by the total number of events.  
 The proportion of times an event occurs relative to all events that have occurred is the probability of that event.
 
-\begin{myexample}
-Fair coin toss -- as is traditional when demonstrating probability.
-\end{myexample}
-
-\begin{myexample}
-Some other example
-\end{myexample}
+%\begin{myexample}
+%Fair coin toss -- as is traditional when demonstrating probability.
+%\end{myexample}
+%
+%\begin{myexample}
+%Some other example
+%\end{myexample}
 
 % *************** %
 \subsection{Information}
@@ -298,12 +306,12 @@ Let $I: [0,1] \rightarrow \mathbb{R}$ be a monotonic function that measures the 
 \end{mydef} 
 %
 The first axiom says that the information function must output a positive value;  it makes no sense to have lost information by witnessing an event.  The second says that there is no information to be gained by witnessing an event which we know is certain to occur.  The third says that the information gained after witnessing two events is the same as gaining the information from witnessing them separately.  A commonly used information function which obeys these axioms is $I(p) = -\log_b(p)$ for some base $b$.
-\begin{myexample}
-Some other example
-\end{myexample}
-\begin{myexample}
-Some other example
-\end{myexample} 
+%\begin{myexample}
+%Some other example
+%\end{myexample}
+%\begin{myexample}
+%Some other example
+%\end{myexample} 
 % *************** %
 \subsection{Entropy}
 % *************** %
@@ -322,12 +330,12 @@ H(S) &= \frac{1}{N} \cdot \sum_{i = 1}^n  (N \cdot p_i) \cdot -\log_b (p_i)\\
 \end{align*}  
 \end{mydef}
 
-\begin{myexample}
-Some other example
-\end{myexample}
-\begin{myexample}
-Some other example
-\end{myexample}
+%\begin{myexample}
+%Some other example
+%\end{myexample}
+%\begin{myexample}
+%Some other example
+%\end{myexample}
 
 \begin{mydef}
 Let $S$ and $T$ be two sources emitting streams of events from the set $E = \{e_1, e_2, \ldots, e_n\}$.  Denote the probability of $S$ emitting $e_i$ and $T$ emitting $e_j$ as $p_{i,j}$.  Then the joint entropy of $S$ and $T$ is:
@@ -476,9 +484,10 @@ The fact that a form exists which is a proper metric immediately leads to the po
 % *************** %
 \subsection{Kolmogorov Complexity}
 % *************** %
-\begin{quotation}\ToDo{paraphrase}
-In contrast to Shannon theory where the basic objects are random variables and entropies are average informations, algorithmic information theory deals with individual symbol strings and with the actual information needed to specify them. 
-To ``specify'' a sequence $X$ means here to give the necessary input to a universal computer $U$, such that $U$ prints $X$ on its output and stops. The analogon to entropy, called here usually the complexity $K(X)$ of $X$, is the minimal length of any input which leads to the output $X$, for fixed $U$. It depends on $U$, but it can be shown that this dependence is weak and can be neglected in the limit when $K(X)$ is large.
-
-Let us denote the concatenation of two strings $X$ and $Y$ as $XY$. Its complexity is $K(XY)$. It is intuitively clear that $K(XY)$ should be larger than $K(X)$ but cannot be larger than the sum $K(X)+K(Y)$. Even if $X$ and $Y$ are completely unrelated, so that one cannot learn anything about $Y$ by knowing $X$, $K(XY)$ is slightly smaller that $K(X) + K(Y)$. The reason is simply that the information needed to reconstruct $XY$ (which is measured by $K(XY)$) does not include the information about where $X$ ends and $Y$ starts (which is included of course in $K(X) + K(Y)$). The latter information increases logarithmically with the total length $N$ of the sequence $XY$. It is one of the sources for ubiquitous terms of order $\log(N)$ which become irrelevant in the limit $N \rightarrow \infty$, but make rigorous theorems in algorithmic information theory look unpleasant.
-\end{quotation}  
+Until now, we have discussed information in terms of random variables where entropy is average information.  Another approach instead  considers the actual information needed to specify strings of symbols.  The Kolmogorov complexity, $K(X)$, is the minimal length of any input which leads to the output $X$, for some fixed universal computer. The Kolmogorov complexity of the concatenation of two strings $X$ and $Y$, $K(XY)$, should be larger than $K(X)$ but cannot be larger than the sum $K(X)+K(Y)$
+%\begin{quotation}\ToDo{paraphrase}
+%In contrast to Shannon theory where the basic objects are random variables and entropies are average informations, algorithmic information theory deals with individual symbol strings and with the actual information needed to specify them. 
+%To ``specify'' a sequence $X$ means here to give the necessary input to a universal computer $U$, such that $U$ prints $X$ on its output and stops. The analogon to entropy, called here usually the complexity $K(X)$ of $X$, is the minimal length of any input which leads to the output $X$, for fixed $U$. It depends on $U$, but it can be shown that this dependence is weak and can be neglected in the limit when $K(X)$ is large.
+%
+%Let us denote the concatenation of two strings $X$ and $Y$ as $XY$. Its complexity is $K(XY)$. It is intuitively clear that $K(XY)$ should be larger than $K(X)$ but cannot be larger than the sum $K(X)+K(Y)$. Even if $X$ and $Y$ are completely unrelated, so that one cannot learn anything about $Y$ by knowing $X$, $K(XY)$ is slightly smaller that $K(X) + K(Y)$. The reason is simply that the information needed to reconstruct $XY$ (which is measured by $K(XY)$) does not include the information about where $X$ ends and $Y$ starts (which is included of course in $K(X) + K(Y)$). The latter information increases logarithmically with the total length $N$ of the sequence $XY$. It is one of the sources for ubiquitous terms of order $\log(N)$ which become irrelevant in the limit $N \rightarrow \infty$, but make rigorous theorems in algorithmic information theory look unpleasant.
+%\end{quotation}  

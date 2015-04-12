@@ -1,5 +1,5 @@
 %************************************************
-\chapter{Similarity Search}\label{ch:cost}
+\chapter{Similarity Search}\label{ch:similarity_search}
 %************************************************
 \section{The cost of similarity search}
 Having established the link between JSD and SED, we should now like to compare them.  Since both give the same ordering, we must examine efficiency.  We will compare them using intrinsic dimensionality (IDIM) and a probabilistic analysis designed to measure the cost and general notion of the tractability of similarity search techniques over high-dimensional metric spaces.  
@@ -115,6 +115,8 @@ Let $f(x)$ be the probability density function of $d$ over $X$, with median $\mu
 The importance of the effect of $r$ on the calculation is clearly highlighted, given that $h$ is likely to be in the region of 20 - 30 for many applications of similarity search.
 
 For a space with $n$ nodes the maximum height $h$ of a binary tree is $\log_2(n + 1) - 1$. 
+\subsection{Verification of the cost function}
+Experiment with Vantage point tree to show that this is a reasonable cost function.
 \section{Comparison of distance metrics}
 A central requirement of metric space indexing structures is that the distance metric has the triangle inequality property. In their definitional form none of NCD, CPD, SED nor Jensen-Shannon divergence obeys triangle inequality, and are thus not proper distance metrics. 
 % Using the method of extracting paths from trees described above, however, leads to vectors that do not exhibit the pathological cases violating triangle inequality for SED; 
@@ -140,19 +142,19 @@ $JS^{0.5}$		&8.50651	&	threshold	&0.1676 	&0.1786	 	&0.1866 	&0.1927 	&0.1999 \\
 \caption{Generated Tree data, depth 4, branching-factor 10}
 \label{tab:uniform_tree_cost}
 \end{table}
-Table \ref{tab:uniform_tree_cost} shows a the results of applying this cost function.  Since these data were generated trees, it was possible to use SED in its raw form.  This gave a clear advantage over JSD, which had to be square rooted to gain the triangle inequality property. Notice that the cost is several orders of magnitude lower.  Enforcing triangle inequality on SED by raising it to the power 0.48 gave a very similar result to JSD, and in practice we would not expect to be able to distinguish between them.
+%Table \ref{tab:uniform_tree_cost} shows a the results of applying this cost function.  Since these data were generated trees, it was possible to use SED in its raw form.  This gave a clear advantage over JSD, which had to be square rooted to gain the triangle inequality property. Notice that the cost is several orders of magnitude lower.  Enforcing triangle inequality on SED by raising it to the power 0.48 gave a very similar result to JSD, and in practice we would not expect to be able to distinguish between them.
 
 Not all datasets are as uniform as this, however. The next dataset, also generated, allowed much greater variation among the data points.  Figure \ref{fig:random_trees_cost} gives a more holistic view of these data. Looking at the entire distribution at once, first, the probability density function allows the calculation of the IDIM, and allows us to gauge the dimensionality visually; secondly, the cumulative density function allows us to see what proportion of the data fall below a certain distance, giving us the opportunity to pick a threshold distance for a range query; thirdly, we can calculate the cost function in terms of query radius; then finally, we can perform a reverse lookup on the CDF to find what query radius will return what proportion of the data, then apply this to the cost function to view it in terms of expected return set size.  This allows a fair comparison between metrics, since the absolute values of the distances cannot be used to perform a comparison.
 
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.9\columnwidth]{gfx/random_trees_cost}
-\caption[Metric Search Cost -- Non-uniform Generated Trees]{Generated tree data, showing the predictive costs of searching a metric index from a sample of distance.  Top left is the probability density function, top right is the cumulative density function, bottom left is estimated cost of searching with a particular query radius, and bottom right is the estimated cost of performing a query that is expected to return a given proportion of the data in the index}
-\label{fig:random_trees_cost}
-\end{figure}
+%\begin{figure}[h!]
+%\centering
+%\includegraphics[width=0.9\columnwidth]{gfx/random_trees_cost}
+%\caption[Metric Search Cost -- Non-uniform Generated Trees]{Generated tree data, showing the predictive costs of searching a metric index from a sample of distance.  Top left is the probability density function, top right is the cumulative density function, bottom left is estimated cost of searching with a particular query radius, and bottom right is the estimated cost of performing a query that is expected to return a given proportion of the data in the index}
+%\label{fig:random_trees_cost}
+%\end{figure}
 
-These results again exemplify the benefit of not having to enforce triangle inequality on SED.  Once again, however, there is little to choose between JSD and SED raised to the power 0.48; this time, SED performed slightly better.  This graphical view also demonstrates an important point about this dataset: beyond a very small threshold, raising both metrics to their respective powers had the effect of making searching perform no better than a linear scan. 
+%These results again exemplify the benefit of not having to enforce triangle inequality on SED.  Once again, however, there is little to choose between JSD and SED raised to the power 0.48; this time, SED performed slightly better.  This graphical view also demonstrates an important point about this dataset: beyond a very small threshold, raising both metrics to their respective powers had the effect of making searching perform no better than a linear scan. 
 
 Our final dataset was a set of 112,544 color histograms (112-dimensional vectors) from an image database available from SISAP\footnote{http://www.sisap.org}.  Figure \ref{fig:colors_cost} displays the same process as the last dataset.  This time SED was required to have triangle inequality enforced.
 \begin{figure}
@@ -186,7 +188,8 @@ Our final dataset was a set of 112,544 color histograms (112-dimensional vectors
 %\label{fig:colors_cost}
 %\end{figure}
 
-In this real-world dataset, there was a clear benefit to using SED over JSD; the cost function grew at a substantially slower rate.  And in general, SED is a better choice for metric search.  This is especially true in the domain of trees, where there is no requirement to enforce triangle inequality, since no violations occur.  Where this requirement does exist SED is at least as good as JSD, and as we have found can even be better.
+In this real-world dataset, there was a clear benefit to using SED over JSD; the cost function grew at a substantially slower rate.  And in general, SED is a better choice for metric search.  
+%This is especially true in the domain of trees, where there is no requirement to enforce triangle inequality, since no violations occur.  Where this requirement does exist SED is at least as good as JSD, and as we have found can even be better.
 
 \begin{figure}
         \centering
