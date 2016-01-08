@@ -1,69 +1,13 @@
 %************************************************
 \chapter{Clustering, classification and outlier detection}\label{ch:clustering_classification_and_outlier_detection}
 %************************************************
-%\begin{flushleft}{\slshape    
-%    At the time, Nixon was normalizing relations with China.  
-%    I figured that if he could normalize relations, then so could I} \\ \medskip
-%    --- Edgar Codd
-%\end{flushleft}
-%%
-%In this chapter we describe a new clustering algorithm based on the multiway structural entropic distance described in chapter \ref{ch:msed}.  We compare it to other information theoretic approaches to clustering blah blah blah.
-%\section{Clustering algorithms}
-%The fundamental goal of a clustering algorithm is to group a set of objects together into subsets such that objects in one subset should be as similar as possible to each other and be as dissimilar as possible to objects in the other subsets.
-%\subsection{Flat clustering methods}
-%Flat clustering operates without a structure that relates clusters.
-%\begin{myexample}{k-means}
-%\end{myexample}
-%\subsection{Hierarchical clustering methods}
-%An alternative to flat clustering is to create a hierarchy of clusters.  There are two basic approaches to hierarchical clustering, top-down or bottom-up.  
-%\begin{myexample}{Single-linkage}
-%\end{myexample}
-%
-%\begin{myexample}{Complete-linkage}
-%\end{myexample}
-%\section{Hierarchical clustering with MSED}
-%\begin{algorithm}\ToDo{Write the clustering algorithm}
-% \SetAlgoLined
-% \KwData{this text}
-% \KwResult{how to write algorithm with \LaTeX2e }
-% initialization\;
-% \While{not at end of this document}{
-%  read current\;
-%  \eIf{understand}{
-%   go to next section\;
-%   current section becomes this one\;
-%   }{
-%   go back to the beginning of current section\;
-%  }
-% }
-% \caption{How to write algorithms}
-%\end{algorithm}
-In cluster analysis, a vector space is partitioned into groups of vectors called clusters that are mutually similar.  
-We focus on two categories of algorithms to achieve this task that have a strong resemblance to indexing mechanisms used for similarity search:  agglomerative and partitional.  
-In particular, we look at the clusterings produced with Structural Entropic Distance (SED)\cite{Connor:2011} as the distance metric, and how the multi-way generalisation (MSED)\cite{Moss:2013} can be used to produce clusters that are farther apart and whose elements are more mutually similar.
+Cluster analysis uses a distance function to partition a vector space into groups of vectors called clusters that are mutually similar. The results of these clusters are frequently used for metric indexing.  In this chapter, we focus on two categories of algorithms to achieve this task that have a strong resemblance to indexing mechanisms used for similarity search:  agglomerative and partitional, looking at the clusterings produced with SED as the distance metric, and how the multi-way generalisation (MSED) can be used to produce clusters that are farther apart and whose elements are more mutually similar.
 
 In the sections that follow, we devise an algorithm for hierarchical clustering based on MSED; an algorithm for selecting the seeds to the KMeans algorithm using MSED; and a cluster validity measure based on MSED.  
 We show that hierarchical clusterings produced by our algorithm form more dense clusters that are farther apart than those produced by other hierarchical algorithms, using both existing cluster validity measures and our own.  
-We also show that the seeds produced by our selection algorithm are more divergent than existing mechanisms employed by KMeans, although whether this actually helps the KMeans algorithm depends on the properties of the data.
-
-Producing tight clusterings that are clearly separated is useful for metric indexing since it allows greater pruning opportunity.
-%\section{Multi-way divergence}
-%SED is a distance metric based on information theory that was originally conceived as a metric for comparing tree structures.  It was later redefined as a vector distance metric in \cite{Connor:2012}.  In this paper, we are interested in the clusterings produced by SED, and in particular how its generalisation MSED can be used.  MSED operates over probability vectors or vectors that have been scaled such that each component is positive and their sum equals 1. It is defined, both its standard two-way form and generalised $n$-way form, as a ratio of the complexity of the centroid to the geometric mean of complexities of individual vectors:
-%\[
-%	\delta(\mathbf{x_1}, \ldots, \mathbf{x_n}) = \frac{C(\frac{1}{n}\sum_{i = 1}^n \mathbf{x_i})}{\sqrt[n]{\prod_{i = 1}^n C(\mathbf{x_i})}}\\
-%\]
-%where the complexity, $C(\mathbf{x})$ is a function of Shannon entropy, $H_b(\mathbf{x}) = -\sum x_i \log_b x_i$:
-%\[
-%	C(\mathbf{x}) = b^{H_b(\mathbf{x})}
-%\]
-%This value is then scaled into [0,1] to make different input sizes comparable:
-%\[
-%	MSED(\mathbf{x_1}, \ldots, \mathbf{x_n}) = \frac{\delta(\mathbf{x_1}, \ldots, \mathbf{x_n}) - 1}{n - 1}
-%\]
-%
-%MSED was shown to correlate highly with both the mean intra-cluster distance and the mean distance to the centroid of a cluster\cite{Moss:2013}, instead giving a more direct measure of mutual similarity.
+We also show that the seeds produced by our selection algorithm are more divergent than existing mechanisms employed by KMeans, although whether this actually helps the KMeans algorithm depends on the properties of the data.  Producing tight clusterings that are clearly separated is useful for metric indexing since it allows greater pruning opportunity.
 \section{Clustering Techniques}
-Two forms of clustering are of particular interest because of their likeness to metric indexes: agglomerative methods and partitional methods.  In this section we introduce a new agglomerative algorithm, a seed selection algorithm for partitional methods and an internal cluster validity measure all of which use MSED at their core.
+Two forms of clustering are of particular interest because of their likeness to metric indexes: agglomerative methods and partitional methods.  In this section we introduce an agglomerative algorithm, a seed selection algorithm for partitional methods and an internal cluster validity measure all of which use MSED at their core.
 \subsection{Agglomerative Methods}
 Agglomerative methods are bottom up, each point starts in its own cluster and pairs of clusters $(A, B)$ are merged in a greedy fashion according to some merge criterion to produce a new cluster.  The clustering ends when the required number of clusters exist or continues until all points are in the same cluster, at which point a tree can be produced showing a hierarchy of clusters.  Table \ref{tab:merge} shows the most commonly used merge criteria for hierarchical clustering.
 \begin{table}
@@ -92,34 +36,34 @@ Partition methods divide up the space into partitions using hyperplanes.  A set 
 The KMeans algorithm is one such method.  It begins in the usual way by selecting seeds, then partitioning the space by assigning each remaining point to its closest centroid.  For the next iteration it selects as seeds the centroids of each cluster and repartitions the space.  This process reiterates until there is no improvement according to some stopping criterion.  Here we can make use of MSED: stopping when the sum of cluster divergences does not decrease.
 
 KMeans, however, is highly sensitive to the initial set of seeds\cite{Arthur:2007}.  Although seeds are usually chosen at random, a selection algorithm, K-Means++, aims to provide points that are far apart with a high degree of probability as shown in algorithm \ref{alg:kmeans++}.
-%\begin{algorithm}
-%\caption{KMeans++}
-%\label{alg:kmeans++}
-%\begin{algorithmic}
-%\State $\mathrm{C} \gets $ a uniformly random point from $X$
-%\While{$|\mathrm{C}| < k$}
-%	\State $x \gets$ a point $p$ with probability $\propto \min_{c \in C} d^2(p, c)$
-%	\State $\mathrm{C} \gets \mathrm{C} \cup \{x\}$
-%\EndWhile
-%\end{algorithmic}
-%\end{algorithm}
+\begin{algorithm}
+\caption{KMeans++}
+\label{alg:kmeans++}
+\begin{algorithmic}
+\State $\mathrm{C} \gets $ a uniformly random point from $X$
+\While{$|\mathrm{C}| < k$}
+	\State $x \gets$ a point $p$ with probability $\propto \min_{c \in C} d^2(p, c)$
+	\State $\mathrm{C} \gets \mathrm{C} \cup \{x\}$
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
 
 Seed selection is another candidate application for MSED.  Clustering is an expensive operation, and we do not want to cause unnecessary extra expense, so a greedy algorithm (algorithm \ref{alg:msed}) presents itself naturally as a fast solution that may be good enough:
-%\begin{algorithm}
-%\caption{MSED seed selection}
-%\label{alg:msed}
-%\begin{algorithmic}
-%\State $\mathrm{C} \gets $ a uniformly random point from $X$
-%\While{$|\mathrm{C}| < k$}
-%	\State $\mathrm{C} \gets \mathrm{C} \cup \{ arg \max_{x \in X \setminus C} MSED(C \cup \{x\}) \}$
-%\EndWhile
-%\end{algorithmic}
-%\end{algorithm}
+\begin{algorithm}
+\caption{MSED seed selection}
+\label{alg:msed}
+\begin{algorithmic}
+\State $\mathrm{C} \gets $ a uniformly random point from $X$
+\While{$|\mathrm{C}| < k$}
+	\State $\mathrm{C} \gets \mathrm{C} \cup \{ arg \max_{x \in X \setminus C} MSED(C \cup \{x\}) \}$
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
 Iteratively, pick a point that maximizes the divergence of the set of seeds.  From inspection, this algorithm is at least as fast as KMeans++, asymptotically; KMeans++ has to calculate the squared distance of every point to each of the $k$ seeds, while algorithm \ref{alg:msed} has to calculate the MSED value of the set of seeds together with every point for each of the $k$ seeds.
 \subsection{Cluster validation}
 Assessing validity of a clustering presents itself with many difficulties; the requirements, by necessity, are governed by the dataset being clustered. There are, however, two types of cluster validation technique in common usage: internal and external.  Internal measures evaluate the clustering solely on the data that was clustered.  External measures, rely on class labels produced by humans to evaluate the clustering.  
 
-Since we are examining clustering techniques in the context of metric indexing, external measures provide little guidance with respect to our notion of a good clustering.  We do, however, include one external measure for completeness since our datasets have class labels.
+Since we are examining clustering techniques in the context of metric indexing, external measures provide little guidance with respect to our notion of a good clustering.
 \subsubsection{Internal cluster measures}
 The following measures produce scores that favour high similarity within cluster and low similarity between clusters. One major drawback of internal measures is that they are biased towards algorithms that use same cluster model.  Table \ref{tab:cluster_validation} shows two such commonly used measures: The Davies-Bouldin Index, which examines all pairs of clusters and produces a score based on the ratio of the sum of average distance-to-centroid and the distance between cluster centroids; lower scores are indicative of better clusterings.  The Dunn index, meanwhile, is based upon finding the minimum ratio of distance between clusters and the maximum of intra-cluster distances; here, higher scores are better.
 
@@ -141,53 +85,7 @@ Davies-Bouldin Index & $\frac{1}{n} \sum_{i = 1}^n \max_{i \neq j} \left( \frac{
 \hline
 \end{tabularx}
 \end{table}
-\subsubsection{External cluster measures}  While not a good indicator for success in this paper, one example of an external measure, which we include for completeness, is the $F_1$ measure.  
 
-Given a set of class labels assigned by human to each of the data points, the number of correctly classified points in a cluster can be counted, either relative to the size of a the cluster or to the size of class.  The harmonic mean of these values is the $F_1$-score, or more formally:
-
-%\begin{itemize}
-%\item Clustering is evaluated based on class labels assigned by humans.
-%\item Attributes present may not allow separation of clusters.
-%\item NOT A GOOD INDICATOR FOR SUCCESS IN THESE EXPERIMENTS.
-%\end{itemize}
-\[
-	F_1(C, C^*) = \frac{2PR}{P + R}
-\]
-where $C$ is a cluster and $C^*$ is a classification, $P = \frac{|C \cap C^*|}{|C|}$ and $R = \frac{|C \cap C^*|}{|C^*|}$
-
-To assess the entire clustering effort, the determine the most likely class for each of the clusters is determined and then these $F_1$-scores are averaged.  One commonly used method is micro-averaging:
-\[
-	F_1 = \sum_i \frac{|C^*_i|}{| \bigcup C^*|} \max_{j} \{F(C_j, C^*_i)\}
-\]
-We refer to this value herein as the $F_1$ measure score.
-%where 
-%\[
-%Macroaveraged = \frac{1}{n} \sum_i \max_{j} \{F(C_j, C^*_i)\}
-%\]
-
-%Purity
-%\[
-%	P = \sum_i \frac{|C_i|}{| \bigcup C|} \max_j\left\lbrace\frac{|C \cap C^*_j|}{|C|}\right\rbrace
-%\]
-
-%N.B High purity is easy to achieve with large numbers of clusters.
-%\subsubsection{Entropy}
-%\[
-%	E = \sum_i \frac{|C_i|}{| \bigcup C|} H(C_i)
-%\]
-%where $H(C) = -\sum_i \frac{|C \cap C^*_i|}{|C|} \log_2 \frac{|C \cap C^*_i|}{|C|} $
-
-
-
-%\section{Classification}
-%\subsection{Unsupervised}
-%Labels are not known in advance. Do 
-%\subsection{Supervised}
-%\begin{itemize}
-%\item Index the training set then for each new point get k-nearest neighbours then majority-rule determines its class.
-%\item Each new point has class of Nearest centroid.
-%\item Each new point has class with min MSED(class union point). 
-%\end{itemize} 
 \section{Results}
 To evaluate the proposed techniques, experiments were performed on synthesised data and several real world datasets.  First, we examine the cluster validation scores for the measures described in the previous section.  Secondly, we evaluate the seed selection mechanism and determine its effect on the KMeans algorithm.
 \subsection{Datasets}
@@ -272,284 +170,144 @@ Figure \ref{fig:avg-div} shows the average divergence of the clusters produced b
 \caption{Scores for the three internal measures on the synthesised datasets.  Average and standard deviation of scores over all datasets}\label{tab:avg_dim}
 \begin{tabularx}{\textwidth}{Xl|l|l}
 \hline      
-Algorithms								&Davies-Bouldin  &Dunn		&Avg Divergence\\
+Algorithms						&Davies-Bouldin  &Dunn		&Avg Divergence\\
 \hline 
 SingleLinkage         					&$0.620 \pm 0.186$&$1.846 \pm 0.934$&$0.00077 \pm 0.00122$\\      
 AverageLinkage         					&$0.611 \pm 0.225$&$1.383 \pm 0.937$&\textbf{0.00026 $\pm$ 0.00056}\\        
 CompleteLinkage      					&$1.902 \pm 0.775$&$0.993 \pm 0.899$&$0.00835 \pm 0.00428$\\        
 CentroidLinkage        					&$0.662 \pm 0.176$&$1.849 \pm 0.921$&$0.00177 \pm 0.00258$\\       
 WardsMethod          					&$1.829 \pm 0.678$&$1.105 \pm 0.869$&$0.00555 \pm 0.00437$\\      
-DivergenceLinkage      					&\textbf{0.581 $\pm$ 0.201}&\textbf{1.911 $\pm$ 0.932}&$0.00032 \pm 0.00071$\\ 
-KMeans									&$1.764 \pm 0.632$&$1.072 \pm 0.833$&$0.00456 \pm 0.00296$\\
-%KMeans++									&$1.747 \pm 0.612$&$1.064 \pm 0.831$&$0.00467 \pm 0.00302$\\
-%KMeans-divergence						&$1.771 \pm 0.649$&$1.089 \pm 0.799$&$0.00506 \pm 0.00406$\\
+DivergenceLinkage      			 	&\textbf{0.581 $\pm$ 0.201}&\textbf{1.911 $\pm$ 0.932}&$0.00032 \pm 0.00071$\\ 
+KMeans							&$1.764 \pm 0.632$&$1.072 \pm 0.833$&$0.00456 \pm 0.00296$\\
+KMeans++							&$1.747 \pm 0.612$&$1.064 \pm 0.831$&$0.00467 \pm 0.00302$\\
+KMeans-divergence					&$1.771 \pm 0.649$&$1.089 \pm 0.799$&$0.00506 \pm 0.00406$\\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{table}
+\caption{3 classes of iris plant, 50 samples in each, 4 features.  Arguably should be 2 clusters since two overlap.}\label{tab:iris}
+\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
+\hline
+Algorithms			&Davies-Bouldin  	&Dunn			&Avg Divergence\\ 
+\hline
+SingleLinkage			&0.409637 		&\textbf{1.901472}	&\textbf{0.000034}\\       
+AverageLinkage			&0.506138        		&0.533684			&0.000092\\       
+CompleteLinkage		&1.048860        		&1.239546			&0.000129\\
+CentroidLinkage		&0.781545        		&1.711280			&0.000358\\       
+WardsMethod			&0.730370        		&1.520542			&0.000046\\       
+DivergenceLinkage		&\textbf{0.380792}	&1.786880			&0.000038\\       
+KMeans				&0.732886			&1.539996			&0.000055\\
+KMeans++				&0.7516854		&1.514175			&0.000057\\
+KMeans-divergence		&0.7736252		&1.485374			&0.000057\\   
 \hline
 \end{tabularx}
 \end{table}
 
 
+Divergence does really well on the internal measures: although not a good as Single-linkage on Dunn and Avg Divergence, it is second best and very close.  Ward's method does well on both types of evaluation. K-Means does not benefit from more spaced out pivots on this dataset.
 
+\begin{table}
+\caption{Glass:6 classes of glass, 214 samples, distribution: 
+	   70 float processed building windows,
+       76 non-float building windows,
+       17 float processed vehicle windows,
+       13 containers,
+       9 tableware
+       29 headlamps;
+9 features.}\label{tab:Glass}
+\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
+\hline
+Algorithms			&Davies-Bouldin  	&Dunn			&Avg Divergence\\ 
+\hline 
+SingleLinkage			&0.489649        		&\textbf{1.858714}	&0.000160\\       
+AverageLinkage			&0.390977        		&0.068432			&\textbf{0.000010}\\       
+CompleteLinkage		&0.670883  		&1.691238			&0.001655\\  
+CentroidLinkage		&0.601384        		&1.802741			&0.000676\\       
+WardsMethod			&1.043376  		&0.728610 		&0.000692\\       
+DivergenceLinkage		&\textbf{0.332704}	&0.875735			&0.000015\\       
+KMeans				&1.409232			&0.3262082		&0.00074755\\
+KMeans++				&1.047465			&0.7872234		&0.00102929\\
+KMeans-divergence		&0.7902541		&1.188829			&0.00034769\\
+\hline
+\end{tabularx}
+\end{table}
 
+Divergence again scores best on Davies-Bouldin and is middle-of-the-road for external measures.  While single-linkage and average-linkage have reasonable internal scores, they score worst with external.  KMeans benefits from divergence.
 
-%\begin{table}
-%\caption{3 classes of iris plant, 50 samples in each, 4 features.  Arguably should be 2 clusters since two overlap.}\label{tab:iris}
-%\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
-%\hline
-%Algorithms			&Davies-Bouldin  &Dunn		&Avg Divergence\\ 
-%\hline
-%SingleLinkage		&0.409637 &\textbf{1.901472}&\textbf{0.000034}\\       
-%AverageLinkage		&0.506138        &0.533684	&0.000092\\       
-%CompleteLinkage		&1.048860        &1.239546	&0.000129\\
-%CentroidLinkage		&0.781545        &1.711280	&0.000358\\       
-%WardsMethod			&0.730370        &1.520542	&0.000046\\       
-%DivergenceLinkage	&\textbf{0.380792}&1.786880	&0.000038\\       
-%KMeans				&0.732886		&1.539996	&0.000055\\
-%KMeans++				&0.7516854		&1.514175	&0.000057\\
-%KMeans-divergence	&0.7736252		&1.485374	&0.000057\\   
-%\hline
-%\end{tabularx}
-%\end{table}
-%\begin{table}
-%\caption{avg dim}\label{tab:avg_dim}
-%\begin{tabularx}{\textwidth}{l@{\hskip 0.5in}XXXX}
-%\hline
-%Algorithms			&Micro F-Score	&Macro F-Score	&Entropy		&Purity		\\ 
-%\hline
-%SingleLinkage		&0.774411		&0.774411		&0.666667	&0.666667	\\       
-%AverageLinkage		&0.498316		&0.498316		&1.563569	&0.346667	\\       
-%CompleteLinkage		&0.736579		&0.736579		&0.666667	&0.666667	\\
-%CentroidLinkage		&0.763889		&0.763889		&0.666667	&0.666667	\\       
-%WardsMethod			&\textbf{0.918831}&\textbf{0.918831}&\textbf{0.292985}	&\textbf{0.920000}\\       
-%DivergenceLinkage	&0.761621		&0.761621		&0.761345	&0.653333	\\       
-%KMeans				&0.9014498		&0.9014498		&0.3301393	&0.8928666	\\
-%KMeans++				&0.8795996		&0.8795996		&0.3654847	&0.8682666	\\
-%KMeans-divergence	&0.8689472		&0.8689472		&0.38433		&0.8591332	\\   
-%\hline
-%\end{tabularx}
-%\end{table}
+\begin{table}
+\caption{Thyroid: 3 classes, 215 samples, distribution:
+	150 normal,
+	35 hyper,
+	30 hypo;
+5 features.}\label{tab:Glass}
+\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
+\hline
+Algorithms			&Davies-Bouldin  	&Dunn			&Avg Divergence\\ 
+\hline 
+SingleLinkage			&0.133134        		&5.007502			&0.001135\\       
+AverageLinkage			&1.677889        		&0.325157			&0.000175\\       
+CompleteLinkage		&\textbf{0.000000}	&1.325914			&0.001141\\ 
+CentroidLinkage		&0.692695        		&1.838076			&0.001781\\       
+WardsMethod			&\textbf{0.000000}	&0.923052 		&0.000864\\       
+DivergenceLinkage		&\textbf{0.000000}	&\textbf{Infinity}	&\textbf{-0.000034}\\      
+KMeans				&1.017782			&1.009915			&0.00082436\\
+KMeans++				&0.9062275		&1.157552			&0.00112478\\
+KMeans-divergence		&0.8428109		&1.167863			&0.00116933\\
+\hline
+\end{tabularx}
+\end{table}
 
-%Divergence does really well on the internal measures: although not a good as Single-linkage on Dunn and Avg Divergence, it is second best and very close.  Ward's method does well on both types of evaluation. K-Means does not benefit from more spaced out pivots on this dataset.
+Divergence scores best on all three internal measures, performs relatively poorly on external measures, single-linkage also performs similarly.  Ward's method and complete linkage do well by both types of measure.	Divergence helps kmeans on both external and internal measures.
 
-%\begin{table}
-%\caption{Glass:6 classes of glass, 214 samples, distribution: 
-%	   70 float processed building windows,
-%       76 non-float building windows,
-%       17 float processed vehicle windows,
-%       13 containers,
-%       9 tableware
-%       29 headlamps;
-%9 features.}\label{tab:Glass}
-%\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
-%\hline
-%Algorithms			&Davies-Bouldin  &Dunn		&Avg Divergence\\ 
-%\hline 
-%SingleLinkage		&0.489649        &\textbf{1.858714}	&0.000160\\       
-%AverageLinkage		&0.390977        &0.068432	&\textbf{0.000010}\\       
-%CompleteLinkage		&0.670883        &1.691238	&0.001655\\  
-%CentroidLinkage		&0.601384        &1.802741	&0.000676\\       
-%WardsMethod			&1.043376  		&0.728610 	&0.000692\\       
-%DivergenceLinkage	&\textbf{0.332704}	&0.875735	&0.000015\\       
-%KMeans				&1.409232		&0.3262082	&0.00074755\\
-%KMeans++				&1.047465		&0.7872234	&0.00102929\\
-%KMeans-divergence	&0.7902541		&1.188829	&0.00034769\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%\begin{table}
-%\caption{Glass:6 classes of glass, 214 samples, distribution: 
-%	   70 float processed building windows,
-%       76 non-float building windows,
-%       17 float processed vehicle windows,
-%       13 containers,
-%       9 tableware
-%       29 headlamps;
-%9 features.}\label{tab:Glass}
-%\begin{tabularx}{\textwidth}{lccccccc}
-%\hline
-%Algorithms			&Micro F-Score	&Macro F-Score	&Entropy		&Purity		\\ 
-%\hline 
-%SingleLinkage		&0.421535		&0.313262		&2.060959	&0.383178	\\       
-%AverageLinkage		&0.402061		&0.264720		&2.114059	&0.373832	\\       
-%CompleteLinkage		&0.539646		&0.440644		&1.624666	&0.485981	\\  
-%CentroidLinkage		&0.511041		&0.399098		&1.734169	&0.453271	\\       
-%WardsMethod&\textbf{0.559469}&\textbf{0.495273}&\textbf{1.328825}&\textbf{0.542056}	\\       
-%DivergenceLinkage	&0.466222		&0.345128		&1.883376	&0.439252&\\       
-%KMeans				&0.5118281		&0.4451259		&1.478941 	&0.5503271	\\
-%KMeans++				&0.5489484		&0.4810775		&1.448902	&0.5341122	\\
-%KMeans-divergence	&0.5201437		&0.4312115		&1.603863	&0.4954671	\\
-%\hline
-%\end{tabularx}
-%\end{table}
+\begin{table}
+\caption{Wine: 3 classes, 178 samples, distribution:
+	59 class 1,
+	71 class 2,
+	48 class 3;
+13 features.}\label{tab:Wine}
+\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
+\hline
+Algorithms			&Davies-Bouldin	&Dunn			&Avg Divergence\\ 
+\hline 
+SingleLinkage			&1.015974			&0.809457			&0.000024\\       
+AverageLinkage			&\textbf{0.453063}	&0.548745			&\textbf{0.000023}\\       
+CompleteLinkage		&1.036393			&1.571030			&0.000066\\
+CentroidLinkage		&0.751714			&\textbf{2.160639}	&0.000093\\       
+WardsMethod			&0.845136			&2.102532			&0.000067\\       
+DivergenceLinkage		&\textbf{0.453063}	&0.548745			&\textbf{0.000023}\\       
+KMeans				&0.9270488		&1.878586			&0.00006416\\
+KMeans++				&0.9132972		&1.957229			&0.00006508\\
+KMeans-divergence		&0.9310699		&1.955152			&0.0000664\\
+\hline
+\end{tabularx}
+\end{table}
 
-%Ward's method does really well on external measures, but this time is not so good on the internal measures.  Divergence again scores best on Davies-Bouldin and is middle-of-the-road for external measures.  While single-linkage and average-linkage have reasonable internal scores, they score worst with external.  KMeans benefits from divergence especially in the internal measures, but is slightly worse in External.
+Divergence and average-linkage give the same clustering and are best on two of the three internal measures.  The best all round performance come from the centroid based algorithms: centroid-linkage, ward's method and KMeans.
 
-%\begin{table}
-%\caption{Thyroid: 3 classes, 215 samples, distribution:
-%	150 normal,
-%	35 hyper,
-%	30 hypo;
-%5 features.}\label{tab:Glass}
-%\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
-%\hline
-%Algorithms			&Davies-Bouldin  &Dunn		&Avg Divergence\\ 
-%\hline 
-%SingleLinkage		&0.133134        &5.007502	&0.001135\\       
-%AverageLinkage		&1.677889        &0.325157	&0.000175\\       
-%CompleteLinkage		&\textbf{0.000000}&1.325914	&0.001141\\ 
-%CentroidLinkage		&0.692695        &1.838076	&0.001781\\       
-%WardsMethod			&\textbf{0.000000}&0.923052 	&0.000864\\       
-%DivergenceLinkage	&\textbf{0.000000}&\textbf{Infinity}	&\textbf{-0.000034}\\      
-%KMeans				&1.017782		&1.009915	&0.00082436\\
-%KMeans++				&0.9062275		&1.157552	&0.00112478\\
-%KMeans-divergence	&0.8428109		&1.167863	&0.00116933\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%\begin{table}
-%\caption{Thyroid: 3 classes, 215 samples, distribution:
-%	150 normal,
-%	35 hyper,
-%	30 hypo;
-%5 features.}\label{tab:Glass}
-%\begin{tabularx}{\textwidth}{lccccccc}
-%\hline
-%Algorithms			&Micro F-Score	&Macro F-Score	&Entropy		&Purity		\\ 
-%\hline 
-%SingleLinkage		&0.655454        &0.445090		&1.144602	&0.711628	\\       
-%AverageLinkage		&0.647350        &0.447830		&1.177840	&0.697674	\\       
-%CompleteLinkage		&\textbf{0.896100}&\textbf{0.849380}&0.524916&\textbf{0.902326}\\ 
-%CentroidLinkage		&0.748537        &0.598736		&0.779346	&0.809302	\\       
-%WardsMethod			&0.861557        &0.839329		&\textbf{0.432610}	&0.851163\\       
-%DivergenceLinkage	&0.656312        &0.442687		&1.121894	&0.720930	\\      
-%KMeans				&0.7842707		&0.7508611		&0.5475443	&0.8305581	\\
-%KMeans++				&0.834694		&0.7857289		&0.5160529	&0.8573952	\\
-%KMeans-divergence	&0.8822005		&0.8388021		&0.442364	&0.8925582`	\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%Divergence scores best on all three internal measures, performs relatively poorly on external measures, single-linkage also performs similarly.  Ward's method and complete linkage do well by both types of measure.	Divergence helps kmeans on both external and internal measures.
+\begin{table}
+\caption{WDBC: 2 classes, 569 samples, distribution: 
+	357 benign, 
+	212 malignant;
+30 features}\label{tab:Wine}
+\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
+\hline
+Algorithms			&Davies-Bouldin	&Dunn			&Avg Divergence\\ 
+\hline
+SingleLinkage			&\textbf{0.310634}	&\textbf{3.219226}     &\textbf{0.000009}\\
+AverageLinkage			&0.364385			&2.744352     		&\textbf{0.000009}\\
+CompleteLinkage		&1.193467			&1.500232     		&0.000025\\       
+CentroidLinkage		&0.696482			&2.594994     		&0.000477\\       
+WardsMethod			&0.864533			&2.128549     		&0.000033\\       
+DivergenceLinkage		&\textbf{0.310634}	&\textbf{3.219226}     &\textbf{0.000009}\\       
+KMeans				&1.055442			&1.809522			&0.00002371\\
+KMeans++				&1.032722			&1.858522			&0.00002387\\
+KMeans-divergence		&1.010494			&1.912276			&0.0000242\\
+\hline
+\end{tabularx}
+\end{table}
 
-%\begin{table}
-%\caption{Wine: 3 classes, 178 samples, distribution:
-%	59 class 1,
-%	71 class 2,
-%	48 class 3;
-%13 features.}\label{tab:Wine}
-%\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
-%\hline
-%Algorithms			&Davies-Bouldin	&Dunn		&Avg Divergence\\ 
-%\hline 
-%SingleLinkage		&1.015974		&0.809457	&0.000024\\       
-%AverageLinkage		&\textbf{0.453063}		&0.548745	&\textbf{0.000023}\\       
-%CompleteLinkage		&1.036393		&1.571030	&0.000066\\
-%CentroidLinkage		&0.751714		&\textbf{2.160639}	&0.000093\\       
-%WardsMethod			&0.845136		&2.102532	&0.000067\\       
-%DivergenceLinkage	&\textbf{0.453063}		&0.548745	&\textbf{0.000023}\\       
-%KMeans				&0.9270488		&1.878586	&0.00006416\\
-%KMeans++				&0.9132972	&1.957229	&0.00006508\\
-%KMeans-divergence	&0.9310699		&1.955152	&0.0000664\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%\begin{table}
-%\caption{Wine: 3 classes, 178 samples, distribution:
-%	59 class 1,
-%	71 class 2,
-%	48 class 3;
-%13 features.}\label{tab:Wine}
-%\begin{tabularx}{\textwidth}{lccccccc}
-%\hline
-%Algorithms			&Micro F-Score	&Macro F-Score	&Entropy		&Purity		\\ 
-%\hline 
-%SingleLinkage		&0.505681		&0.496191		&1.548700	&0.404494	\\       
-%AverageLinkage		&0.504859		&0.496468        &1.551784	&0.398876	\\       
-%CompleteLinkage		&0.640014		&0.636546        &0.912773	&0.674157	\\
-%CentroidLinkage		&0.710504		&0.710314		&0.855409	&0.679775	\\       
-%WardsMethod			&0.677878		&0.679213		&0.916335	&0.668539	\\       
-%DivergenceLinkage	&0.504859		&0.496468		&1.551784	&0.398876	\\       
-%KMeans				&0.7090484		&0.7071912		&0.886547	&0.7037639	\\
-%KMeans++		&\textbf{0.7153772}&\textbf{0.7147976}	&0.8747938&\textbf{0.7101684}	\\
-%KMeans-divergence	&0.712767		&0.7121183&\textbf{0.8740619}	&0.7074156	\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%Divergence and average-linkage give the same clustering and are best on two of the three internal measures.  The best all round performance come from the centroid based algorithms: centroid-linkage, ward's method and KMeans.
-
-%\begin{table}
-%\caption{WDBC: 2 classes, 569 samples, distribution: 
-%	357 benign, 
-%	212 malignant;
-%30 features}\label{tab:Wine}
-%\begin{tabularx}{\textwidth}{l@{\hskip 1in}XXl}
-%\hline
-%Algorithms			&Davies-Bouldin	&Dunn		&Avg Divergence\\ 
-%\hline
-%SingleLinkage		&\textbf{0.310634}	&\textbf{3.219226}     &\textbf{0.000009}\\
-%AverageLinkage		&0.364385	&2.744352     &\textbf{0.000009}\\
-%CompleteLinkage		&1.193467	&1.500232     &0.000025\\       
-%CentroidLinkage		&0.696482	&2.594994     &0.000477\\       
-%WardsMethod			&0.864533	&2.128549     &0.000033\\       
-%DivergenceLinkage	&\textbf{0.310634}	&\textbf{3.219226}     &\textbf{0.000009}\\       
-%KMeans				&1.055442	&1.809522	&0.00002371\\
-%KMeans++				&1.032722	&1.858522	&0.00002387\\
-%KMeans-divergence	&1.010494	&1.912276	&0.0000242\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%\begin{table}
-%\caption{WDBC: 2 classes, 569 samples, distribution: 
-%	357 benign, 
-%	212 malignant;
-%30 features}\label{tab:Wine}
-%\begin{tabularx}{\textwidth}{lccccccc}
-%\hline
-%Algorithms			&Micro F-Score	&Macro F-Score	&Entropy		&Purity		\\ 
-%\hline
-%SingleLinkage		&0.685875		&0.656459	&0.950128	&0.629174	\\
-%AverageLinkage		&0.685474		&0.656660	&0.951452	&0.627417	\\
-%CompleteLinkage		&0.649422		&0.655591	&0.754137	&0.657293	\\       
-%CentroidLinkage		&0.684823		&0.653324	&0.934926	&0.639719	\\       
-%WardsMethod			&0.781824		&0.753695	&0.663596	&0.803163	\\       
-%DivergenceLinkage	&0.685875		&0.656459	&0.950128	&0.629174	\\       
-%KMeans				&0.8567329		&0.8486752	&0.5557873	&0.8560106	\\
-%KMeans++				&0.8653063		&0.8570243	&0.5417105	&0.865044	\\
-%KMeans-divergence&\textbf{0.8717941}&\textbf{0.8633478}&\textbf{0.5264413}&\textbf{0.8720914}\\
-%\hline
-%\end{tabularx}
-%\end{table}
-%Divergence and single-linkage give the same clustering and are best on all three internal measures.  KMeans does best on external measures but not so well on internal measures.
-%\subsubsection{Yeast}10 classes, 1484 samples, distribution:
-%	463 cytosolic or cytoskeletal,
-%  	429 nuclear,
-%  	244 mitochondrial,
-%  	163 membrane protein -- no N-terminal signal,
-%  	51 membrane protein -- uncleaved signal,
-%  	44 membrane protein -- cleaved signal,
-%    37 extracellular,
-%    30 vacuolar,
-%    20 peroxisomal,
-%    5 endoplasmic reticulum lumen;
-%8 features.
-%\subsection{External validation}
-\subsubsection{$F_1$ Measure}
-There are no class labels for the synthesised datasets, so the only results for this measure are from the real world data.  Figure \ref{fig:f1-score} shows these results.  With this measure, the scores are reversed.  On average, Divergence-linkage performs similarly to both Single-linkage and Average-linkage, but they are outperformed by Complete-linkage, Centroid-linkage, Ward's Method, and KMeans.  Slight differences do, however, emerge: on the Iris dataset, Average-linkage performs significantly worse than the rest, Complete-linkage is sightly worse than both Divergence-linkage and Single-linkage, and only KMeans and Ward's method do especially well; on the Glass dataset, Single-linkage and Average-linkage do worse than all other methods; and on the WDBC, Complete-linkage performs worst.
-%\subsubsection{Purity}
-%The purity measure tells the same story as the F1 measure.
-%\begin{figure}
-%        \centering
-%        \begin{subfigure}[b]{0.5\textwidth}
-%                \includegraphics[width=\textwidth]{f1-barplot.png}
-%                \caption{F1 Measure}
-%                \label{fig:f1-score}
-%        \end{subfigure}%
-%		~         
-%        \begin{subfigure}[b]{0.5\textwidth}
-%                \includegraphics[width=\textwidth]{purity-barplot.png}
-%                \caption{Purity}
-%                \label{fig:purity}
-%        \end{subfigure}%
-%        \caption{Classification scores for datasets}\label{fig:external}
-%\end{figure}
+Divergence and single-linkage give the same clustering and are best on all three internal measures.  KMeans does best on external measures but not so well on internal measures.
 
 \subsection{Seed selection}
 Figure \ref{fig:seeds} shows the impact of increasing the dimensionality of the space on the pivot selection algorithms.  First, the number of clusters created is the same as the number of dimensions (Figure \ref{fig:var_pivots}).  While the max divergence algorithm clearly chooses points that are highly divergent in the lower dimensions, very quickly the algorithm becomes no better than random.  Secondly, the cluster size is kept constant (Figure \ref{fig:fixed_pivots}). The effect of the dimensionality is also seen, however, much less pronounced: up to about 100 dimensions, max divergence algorithm produces significantly more divergence seeds.  
@@ -600,12 +358,10 @@ Figure \ref{fig:kmeans} shows how seed selection affects the final outcome of th
 %   \label{fig:kmeans}
 %\end{figure}%
 
-\section{Conclusions and future work}
-We have shown a number of uses for the MSED divergence function for clustering tasks.  First, Divergence-linkage clustering produces clusters that have low Davies-Bouldin Index scores compared to other clustering techniques. It also produces good scores on the Dunn index and average MSED, too.  Clusterings produced in this way are, therefore in general, more tightly packed with greater separation between clusters than other methods.  The fact that MSED does not always do so well on the external measure, $F_1$ score, is an inherent problem with using metric representations.  Real world data do not always form tight clusters and may not be easily separable.  The fact that Divergence-linkage does, makes it less likely to classify correctly; it does however make a good starting point to examine further MSED based clustering for metric indexing.
+\section{Conclusion}
+We have shown a number of uses for the MSED divergence function for clustering tasks.  First, Divergence-linkage clustering produces clusters that have low Davies-Bouldin Index scores compared to other clustering techniques. It also produces good scores on the Dunn index and average MSED, too.  Clusterings produced in this way are, therefore in general, more tightly packed with greater separation between clusters than other methods.    Real world data do not always form tight clusters and may not be easily separable.  It does however make a good starting point to examine further MSED based clustering for metric indexing.
 
 Secondly, we demonstrated a selection algorithm to seed KMeans.  This algorithm consistently produced seeds that were more divergent than both random selection and KMeans++.  And although this made little difference with external validation, it improved the Davies-Bouldin and Dunn index scores for KMeans.  This makes this technique viable as a pivot selection mechanism for pivot table type metric indexes.
-
-Future work for MSED clustering involves designing metric indexes that take advantage of the tight clusterings with greater separation to exclude a greater proportion of the data when searching.
 
 %2 dim: \\
 %\resizebox{\textwidth}{!}{%
@@ -715,4 +471,3 @@ Future work for MSED clustering involves designing metric indexes that take adva
 %\end{tabular}}
 %\section{Classification}
 %\section{Outlier detection}
-\section{Conclusion}
